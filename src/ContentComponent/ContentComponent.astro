@@ -1,0 +1,16 @@
+---
+---
+
+<content-component id="content-component-container">
+	<slot />
+</content-component>
+
+<script>
+	class ContentComponent extends HTMLElement {
+		constructor() {
+			super();
+		}
+	}
+
+	customElements.define('content-component', ContentComponent);
+</script>

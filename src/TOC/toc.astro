@@ -1,0 +1,17 @@
+---
+interface toc {
+	depth: number;
+	[k: string]: any;
+}
+const { toc } = Astro.props;
+---
+
+<ol class="toc">
+	{
+		toc.map((item) => (
+			<li>
+				<a href={`#${item.slug}`}>{item.text}</a>
+			</li>
+		))
+	}
+</ol>

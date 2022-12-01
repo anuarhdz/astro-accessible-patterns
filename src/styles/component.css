@@ -1,0 +1,113 @@
+:root {
+	--content-grid-rows: auto 1fr auto;
+	--modal-grid-rows: 1fr;
+	--drawer-component-background: rgba(0, 0, 0, 0.85);
+	--drawer-component-color: #fff;
+	--drawer-component-padding: 2rem;
+	--dialog-component-background: rgba(0, 0, 0, 0.85);
+	--dialog-component-color: #fff;
+	--dialog-component-padding: 0 2rem;
+	--dialog-content-inner-background: #fff;
+	--dialog-content-inner-color: #000;
+	--dialog-content-inner-padding: 30px;
+}
+
+:where(html) {
+	display: grid;
+	height: 100vh;
+	height: 100dvh;
+	max-block-size: 100vh;
+	max-block-size: 100dvh;
+}
+
+body {
+	display: grid;
+	grid-template-rows: 1fr;
+	max-block-size: 100%;
+}
+
+[role='dialog'][tabindex='-1']:focus {
+	outline: none;
+}
+
+content-component,
+modal-component {
+	grid-area: 1/-1;
+}
+
+content-component {
+	display: grid;
+	grid-template-rows: var(--content-grid-rows);
+}
+
+modal-component {
+	position: relative;
+	display: grid;
+	grid-template-rows: var(--modal-grid-rows);
+	block-size: 100%;
+}
+
+modal-component[aria-hidden='true'] {
+	display: none;
+}
+
+modal-component > [aria-hidden='true'] {
+	display: none;
+}
+
+modal-component[open] {
+	z-index: 100;
+}
+
+modal-component[open] [role='dialog'] {
+	position: fixed;
+}
+
+modal-component .drawer-component-base,
+modal-component .dialog-component-base {
+	grid-area: 1/-1;
+	height: 100%;
+	width: 100%;
+}
+
+.drawer-component-base {
+	background: var(--drawer-component-background);
+	color: var(--drawer-component-color);
+}
+
+.drawer-content,
+.dialog-content {
+	height: 100%;
+	max-height: 100vh;
+	max-height: 100dvh;
+	display: grid;
+	grid-template-rows: auto 1fr;
+	grid-template-columns: auto;
+	gap: 3rem;
+	justify-items: start;
+}
+
+.dialog-content {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	background-color: var(--dialog-component-background);
+	color: var(--dialog-component-color);
+	align-items: center;
+}
+
+.dialog-content > * {
+	padding: var(--dialog-content-inner-padding);
+	background-color: var(--dialog-content-inner-background);
+	color: var(--dialog-content-inner-color);
+	max-width: calc(100% - 4rem);
+}
+
+@media (min-width: 768px) {
+	.drawer-content {
+		--drawer-component-padding: 4rem;
+	}
+	.dialog-content {
+		--dialog-component-padding: 0 4em;
+	}
+}

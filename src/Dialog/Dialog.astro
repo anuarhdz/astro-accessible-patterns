@@ -1,0 +1,24 @@
+---
+interface Props {
+	id: string;
+	modalTriggerId: string;
+}
+const { id, modalTriggerId } = Astro.props;
+---
+
+<div
+	id={id}
+	data-modal-control={modalTriggerId}
+	data-modal-type="dialog"
+	aria-modal="true"
+	role="dialog"
+	aria-hidden="true"
+	class="layer-component modal-component dialog-component-base"
+	tabindex="-1"
+>
+	<div class="dialog-content" role="document">
+		<div class="drawer-inner">
+			<slot />
+		</div>
+	</div>
+</div>

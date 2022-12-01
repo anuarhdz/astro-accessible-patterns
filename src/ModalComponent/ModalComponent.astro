@@ -1,0 +1,143 @@
+---
+//import './styles/component.css';
+---
+
+<modal-component id="modal-component-container" aria-hidden="true">
+	<slot />
+</modal-component>
+
+<script>
+	import { focusHelper, removeFocusHelper } from '../utils/focus-helper';
+
+	interface ModalComponent {
+		components: HTMLElement[];
+		controls: HTMLElement[];
+		closeControls: HTMLElement[];
+		onControlClick: (event: MouseEvent) => void;
+		onCloseControlClick: (event: MouseEvent) => void;
+		onTouch: (event: TouchEvent) => void;
+		onScroll: (event: MouseEvent) => void;
+		onClickOutsideDialog: (event: PointerEvent) => void;
+		focusableElements: () => HTMLElement[];
+		trigger: HTMLElement;
+		currentDialog: HTMLElement | boolean;
+	}
+
+	class ModalComponent extends HTMLElement {
+		constructor() {
+			super();
+			this.components = Array.from(this.querySelectorAll('.layer-component.modal-component')) ?? [];
+			this.controls = Array.from(document.querySelectorAll('[data-dialog-owner]')) ?? [];
+			this.closeControls = Array.from(this.querySelectorAll('button.close-control')) ?? [];
+			this.onControlClick = this.handleControlClick.bind(this);
+			this.onCloseControlClick = this.handleCloseControlClick.bind(this);
+			this.onScroll = this.preventScroll.bind(this);
+			this.onTouch = this.preventScroll.bind(this);
+			this.onClickOutsideDialog = this.handleClickOutside.bind(this);
+			this.bindClickEvents();
+		}
+
+		bindClickEvents() {
+			this.controls.forEach((control) => control.addEventListener('click', this.onControlClick));
+
+			this.closeControls.forEach((closeControl) =>
+				closeControl.addEventListener('click', this.onCloseControlClick)
+			);
+		}
+
+		handleControlClick(event: MouseEvent) {
+			event.stopPropagation();
+			const trigger = event.currentTarget as HTMLElement;
+			const componentIsClosed = this.componentState === true ? false : true;
+			const currentDialog = this.getCurrentDialog(trigger.dataset.dialogOwner as string);
+			const dialogType = currentDialog ? (currentDialog.dataset.modalType as string) : false;
+
+			if (componentIsClosed && currentDialog) {
+				window.addEventListener('touchmove', this.onTouch, { passive: false });
+				window.addEventListener('wheel', this.onScroll, { passive: false });
+				this.open(trigger, currentDialog);
+			}
+
+			if (currentDialog) {
+				currentDialog.addEventListener('click', this.onClickOutsideDialog);
+			}
+		}
+
+		handleCloseControlClick(event: MouseEvent) {
+			event.stopPropagation();
+			const trigger = event.target as HTMLElement;
+			const componentIsOpen = this.componentState;
+			const currentDialog = (trigger.closest('.layer-component.modal-component') ??
+				false) as HTMLElement;
+			const initialTrigger: boolean | HTMLElement | null = currentDialog
+				? this.getInitialTrigger(currentDialog.id as string)
+				: false;
+
+			if (componentIsOpen && currentDialog && initialTrigger) {
+				window.removeEventListener('touchmove', this.onTouch);
+				window.removeEventListener('wheel', this.onScroll);
+				this.close(initialTrigger, currentDialog);
+			}
+		}
+
+		preventScroll(event: TouchEvent | MouseEvent) {
+			event.preventDefault();
+			event.stopPropagation();
+			return false;
+		}
+
+		handleClickOutside(event: PointerEvent) {
+			event.stopPropagation();
+
+			const componentIsOpen = this.componentState;
+			const clickedElement = event.target as HTMLElement;
+			console.log(clickedElement);
+			const currentDialog = clickedElement.closest(
+				'.layer-component.modal-component'
+			) as HTMLElement;
+			const currentDialogContent = currentDialog.firstElementChild.firstElementChild;
+			const currentDialogTrigger = document.getElementById(currentDialog.dataset.modalControl);
+			const clickOutside = !currentDialogContent.contains(clickedElement);
+
+			if (clickOutside && componentIsOpen) {
+				window.removeEventListener('touchmove', this.onTouch);
+				window.removeEventListener('wheel', this.onScroll);
+				this.close(currentDialogTrigger, currentDialog);
+			}
+		}
+
+		open(trigger: HTMLElement, modal: HTMLElement) {
+			trigger.setAttribute('aria-expanded', 'true');
+			modal.removeAttribute('aria-hidden');
+			document.documentElement.setAttribute('data-modal-component', 'open');
+			this.removeAttribute('aria-hidden');
+			this.toggleAttribute('open');
+			focusHelper(modal);
+		}
+
+		close(initialTrigger: HTMLElement | null, dialog: HTMLElement) {
+			dialog.setAttribute('aria-hidden', 'true');
+			document.documentElement.removeAttribute('data-modal-component');
+			this.setAttribute('aria-hidden', 'true');
+			this.removeAttribute('open');
+			if (initialTrigger) {
+				initialTrigger.setAttribute('aria-expanded', 'false');
+				removeFocusHelper(initialTrigger);
+			}
+		}
+
+		get componentState() {
+			return this.hasAttribute('open');
+		}
+
+		getCurrentDialog(id: string) {
+			return this.components.find((component) => component.id === id) ?? false;
+		}
+
+		getInitialTrigger(id: string) {
+			return this.controls.find((control) => control.dataset.dialogOwner === id) ?? null;
+		}
+	}
+
+	customElements.define('modal-component', ModalComponent);
+</script>
