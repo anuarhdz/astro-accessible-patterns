@@ -1,7 +1,7 @@
 {
   "name": "astro-accessible-patterns",
-  "description": "Component patterns with accessibility in mind."
-  "version": "0.1.0",
+  "version": "1.0.0",
+  "description": "Docs coming soon.",
   "type": "module",
   "exports": {
     ".": "./index.ts"
@@ -10,24 +10,6 @@
     "src",
     "index.ts"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/anuarhdz/astro-accessible-patterns.git"
-  },
-  "homepage": "https://github.com/anuarhdz/astro-accessible-patterns#readme",
-  "bugs": {
-    "url": "https://github.com/anuarhdz/astro-accessible-patterns/issues"
-  },
-  "author": "Anuar Reyes <anuar@hey.com>",
-  "license": "MIT",
-  "keywords": [
-    "astro-component", "withastro", "accessible", "modal", "dialog", "table-of-contents"
-  ],
-  "scripts": {
-    "test": "mocha --parallel --timeout 15000",
-    "format": "prettier -w .",
-    "lint": "eslint . --ext .ts,.js"
-  },
   "devDependencies": {
     "@types/chai": "^4.3.4",
     "@types/eslint": "^8.4.10",
@@ -49,5 +31,23 @@
   },
   "peerDependencies": {
     "astro": "^1.6.12"
-  }
+  },
+  "scripts": {
+    "test": "mocha --parallel --timeout 15000",
+    "format": "prettier -w .",
+    "lint": "eslint . --ext .ts,.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anuarhdz/astro-accessible-patterns.git"
+  },
+  "keywords": [
+    "astro-component", "withastro", "accessible", "modal", "dialog", "table-of-contents"
+  ],
+  "author": "Anuar Reyes <anuar@hey.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anuarhdz/astro-accessible-patterns/issues"
+  },
+  "homepage": "https://github.com/anuarhdz/astro-accessible-patterns#readme"
 }
