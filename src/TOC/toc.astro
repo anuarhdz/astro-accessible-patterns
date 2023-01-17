@@ -6,7 +6,7 @@ interface toc {
 const { toc } = Astro.props;
 ---
 
-<ol class="toc">
+<ol id="toc" class="toc">
 	{
 		toc.map((item) => (
 			<li>
