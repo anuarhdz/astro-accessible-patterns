@@ -1,6 +1,6 @@
 {
   "name": "astro-accessible-patterns",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Docs coming soon.",
   "type": "module",
   "exports": {
@@ -42,7 +42,12 @@
     "url": "git+https://github.com/anuarhdz/astro-accessible-patterns.git"
   },
   "keywords": [
-    "astro-component", "withastro", "accessible", "modal", "dialog", "table-of-contents"
+    "astro-component",
+    "withastro",
+    "accessible",
+    "modal",
+    "dialog",
+    "table-of-contents"
   ],
   "author": "Anuar Reyes <anuar@hey.com>",
   "license": "MIT",
